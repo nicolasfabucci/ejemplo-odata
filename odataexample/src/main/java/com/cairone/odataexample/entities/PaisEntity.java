@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.cairone.odataexample.edm.resources.PaisEdm;
+
 @Entity @Table(name="paises")
 public class PaisEntity implements Serializable {
 	
@@ -19,6 +21,19 @@ public class PaisEntity implements Serializable {
 	private Integer prefijo = null;
 
 	public PaisEntity() {}
+
+	public PaisEntity(Integer id, String nombre, Integer prefijo) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.prefijo = prefijo;
+	}
+
+	public PaisEntity(PaisEdm paisEdm) {
+		this.id = paisEdm.getId();
+		this.nombre = paisEdm.getNombre();
+		this.prefijo = paisEdm.getPrefijo();
+	}
 
 	public int getId() {
 		return id;
@@ -36,7 +51,7 @@ public class PaisEntity implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public int getPrefijo() {
+	public Integer getPrefijo() {
 		return prefijo;
 	}
 

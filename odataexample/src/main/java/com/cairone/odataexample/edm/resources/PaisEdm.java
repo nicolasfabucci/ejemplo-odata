@@ -13,19 +13,23 @@ public class PaisEdm {
 	@EdmProperty(name = "Id", nullable = false)
 	private Integer id = null;
 	
-	@EdmProperty(name = "Nombre", nullable = false)
+	@EdmProperty(name = "Nombre", nullable = false, maxLength = 100)
 	private String nombre= null;
+
+	@EdmProperty(name = "Prefijo", nullable = true)
+	private Integer prefijo = null;
 	
 	public PaisEdm() {}
 
-	public PaisEdm(Integer id, String nombre) {
+	public PaisEdm(Integer id, String nombre, Integer prefijo) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
+		this.prefijo = prefijo;
 	}
 	
 	public PaisEdm(PaisEntity paisEntity) {
-		this(paisEntity.getId(), paisEntity.getNombre());
+		this(paisEntity.getId(), paisEntity.getNombre(), paisEntity.getPrefijo());
 	}
 	
 	public Integer getId() {
@@ -42,6 +46,14 @@ public class PaisEdm {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Integer getPrefijo() {
+		return prefijo;
+	}
+
+	public void setPrefijo(Integer prefijo) {
+		this.prefijo = prefijo;
 	}
 
 	@Override
