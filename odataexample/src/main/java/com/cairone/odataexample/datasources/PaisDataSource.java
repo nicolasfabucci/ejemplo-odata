@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -197,9 +199,11 @@ public class PaisDataSource implements DataSourceProvider, DataSource  {
         int skip = builder.getSkip();
 		List<String> propertyNames = builder.getPropertyNames();
 		
-		List<PaisEntity> paisEntities = (List<PaisEntity>) ( orderByList == null || orderByList.size() == 0 ?
-				paisRepository.findAll(expression) :
-				paisRepository.findAll(expression, new Sort(orderByList)) );
+		Page<PaisEntity> pagePaisEntity = orderByList == null || orderByList.size() == 0 ?
+				paisRepository.findAll(expression, new PageRequest(0, limit)) :
+				paisRepository.findAll(expression, new PageRequest(0, limit, new Sort(orderByList)));
+		
+		List<PaisEntity> paisEntities = pagePaisEntity.getContent();
 		
 		return () -> {
 
@@ -216,7 +220,7 @@ public class PaisDataSource implements DataSourceProvider, DataSource  {
             }
 
             if (skip != 0 || limit != Integer.MAX_VALUE) {
-                filtered = filtered.stream().skip(skip).limit(limit).collect(Collectors.toList());
+                filtered = filtered.stream().skip(skip).collect(Collectors.toList());
             }
 
             if (propertyNames != null && !propertyNames.isEmpty()) {
