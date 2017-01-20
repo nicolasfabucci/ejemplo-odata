@@ -6,10 +6,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
+import org.springframework.validation.FieldError;
 
 import scala.Option;
 
@@ -43,6 +45,9 @@ public class PaisDataSource implements DataSourceProvider, DataSource  {
 	@Autowired private PaisRepository paisRepository = null;
 	@Autowired private PaisFrmDtoValidator paisFrmDtoValidator = null;
 	
+	@Autowired
+	private MessageSource messageSource = null;
+	
 	@Override
 	public Object create(ODataUri uri, Object entity, EntityDataModel entityDataModel) throws ODataException {
 		
@@ -57,9 +62,17 @@ public class PaisDataSource implements DataSourceProvider, DataSource  {
 			binder.validate();
 			
 			BindingResult bindingResult = binder.getBindingResult();
-						
+			
 			if(bindingResult.hasFieldErrors()) {
-				throw new ODataDataSourceException("HAY DATOS INVALIDOS EN LA SOLICITUD ENVIADA");
+				
+				for (Object object : bindingResult.getAllErrors()) {
+				    if(object instanceof FieldError) {
+				        FieldError fieldError = (FieldError) object;
+				        String message = messageSource.getMessage(fieldError, null);
+				        throw new ODataDataSourceException(
+				        		String.format("HAY DATOS INVALIDOS EN LA SOLICITUD ENVIADA. %s", message));
+				    }
+				}
 			}
 			
 			PaisEntity paisEntity = new PaisEntity();
@@ -97,11 +110,19 @@ public class PaisDataSource implements DataSourceProvider, DataSource  {
 			binder.validate();
 			
 			BindingResult bindingResult = binder.getBindingResult();
-						
-			if(bindingResult.hasFieldErrors()) {
-				throw new ODataDataSourceException("HAY DATOS INVALIDOS EN LA SOLICITUD ENVIADA");
-			}
 
+			if(bindingResult.hasFieldErrors()) {
+				
+				for (Object object : bindingResult.getAllErrors()) {
+				    if(object instanceof FieldError) {
+				        FieldError fieldError = (FieldError) object;
+				        String message = messageSource.getMessage(fieldError, null);
+				        throw new ODataDataSourceException(
+				        		String.format("HAY DATOS INVALIDOS EN LA SOLICITUD ENVIADA. %s", message));
+				    }
+				}
+			}
+			
         	Integer paisID = pais.getId();
         	PaisEntity paisEntity = paisRepository.findOne(paisID);
 
