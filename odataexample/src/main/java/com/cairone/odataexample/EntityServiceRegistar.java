@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cairone.odataexample.edm.resources.PaisEdm;
+import com.cairone.odataexample.edm.resources.ProvinciaEdm;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.edm.registry.ODataEdmRegistry;
 
@@ -22,6 +23,7 @@ public class EntityServiceRegistar {
 	@PostConstruct
     public void registerEntities() throws ODataException {
 		oDataEdmRegistry.registerClasses(Arrays.asList(
-				PaisEdm.class));
+				PaisEdm.class,
+				ProvinciaEdm.class));
     }
 }
