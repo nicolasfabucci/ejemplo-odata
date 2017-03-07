@@ -7,16 +7,16 @@ import com.sdl.odata.api.edm.annotations.EdmEntitySet;
 import com.sdl.odata.api.edm.annotations.EdmNavigationProperty;
 import com.sdl.odata.api.edm.annotations.EdmProperty;
 
-@EdmEntity(name = "Provincia", key = { "Pais", "Id" }, namespace = EntityServiceRegistar.NAME_SPACE, containerName = EntityServiceRegistar.CONTAINER_NAME)
+@EdmEntity(name = "Provincia", key = { "PaisId", "Id" }, namespace = EntityServiceRegistar.NAME_SPACE, containerName = EntityServiceRegistar.CONTAINER_NAME)
 @EdmEntitySet("Provincias")
 public class ProvinciaEdm {
 
 	@EdmProperty(name = "Id", nullable = false)
 	private Integer id = null;
-	/*
-	@EdmProperty(name = "PaisID", nullable = false)
+
+	@EdmProperty(name = "PaisId", nullable = false)
 	private Integer paisId = null;
-*/
+
 	@EdmNavigationProperty(name="Pais")
 	private PaisEdm pais = null;
 	
@@ -28,7 +28,7 @@ public class ProvinciaEdm {
 	public ProvinciaEdm(Integer id, PaisEdm pais, String nombre) {
 		super();
 		this.id = id;
-		//this.paisId = paisId;
+		this.paisId = pais.getId();
 		this.pais = pais;
 		this.nombre = nombre;
 	}
@@ -44,7 +44,7 @@ public class ProvinciaEdm {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-/*
+
 	public Integer getPaisId() {
 		return paisId;
 	}
@@ -60,7 +60,7 @@ public class ProvinciaEdm {
 	public void setPais(PaisEdm pais) {
 		this.pais = pais;
 	}
-*/
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -74,7 +74,7 @@ public class ProvinciaEdm {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((pais == null) ? 0 : pais.hashCode());
+		result = prime * result + ((paisId == null) ? 0 : paisId.hashCode());
 		return result;
 	}
 
@@ -92,10 +92,10 @@ public class ProvinciaEdm {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (pais == null) {
-			if (other.pais != null)
+		if (paisId == null) {
+			if (other.paisId != null)
 				return false;
-		} else if (!pais.equals(other.pais))
+		} else if (!paisId.equals(other.paisId))
 			return false;
 		return true;
 	}
