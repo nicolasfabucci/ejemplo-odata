@@ -29,7 +29,7 @@ public class ProvinciaDataSource implements DataSourceProvider, DataSource {
     		return provinciaEdm;
 		}
 		
-		throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PAIS");
+		throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PROVINCIA");
 	}
 
 	@Override
