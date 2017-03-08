@@ -109,8 +109,8 @@ public class ProvinciasStrategyBuilder {
         
     	Map<String, Object> keys = selectByKeyOperation.getKeyAsJava();
     	
-        Integer provinciaId = Integer.valueOf(keys.get("Id").toString());
-        Integer paisId = Integer.valueOf(keys.get("PaisId").toString());
+        Integer provinciaId = Integer.valueOf(keys.get("id").toString());
+        Integer paisId = Integer.valueOf(keys.get("paisId").toString());
         
         BooleanExpression exp = qProvincia.id.eq(provinciaId).and(qProvincia.pais.id.eq(paisId));
         this.expression = this.expression == null ? exp : this.expression.and(exp);

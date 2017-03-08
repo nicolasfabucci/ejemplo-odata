@@ -7,20 +7,20 @@ import com.sdl.odata.api.edm.annotations.EdmEntitySet;
 import com.sdl.odata.api.edm.annotations.EdmNavigationProperty;
 import com.sdl.odata.api.edm.annotations.EdmProperty;
 
-@EdmEntity(name = "Provincia", key = { "PaisId", "Id" }, namespace = EntityServiceRegistar.NAME_SPACE, containerName = EntityServiceRegistar.CONTAINER_NAME)
+@EdmEntity(name = "Provincia", key = { "paisId", "id" }, namespace = EntityServiceRegistar.NAME_SPACE, containerName = EntityServiceRegistar.CONTAINER_NAME)
 @EdmEntitySet("Provincias")
 public class ProvinciaEdm {
 
-	@EdmProperty(name = "Id", nullable = false)
+	@EdmProperty(nullable = false)
 	private Integer id = null;
 
-	@EdmProperty(name = "PaisId", nullable = false)
+	@EdmProperty(nullable = false)
 	private Integer paisId = null;
 
-	@EdmNavigationProperty(name="Pais")
+	@EdmNavigationProperty
 	private PaisEdm pais = null;
 	
-	@EdmProperty(name = "Nombre", nullable = false)
+	@EdmProperty(nullable = false)
 	private String nombre = null;
 	
 	public ProvinciaEdm() {}
@@ -74,7 +74,7 @@ public class ProvinciaEdm {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((paisId == null) ? 0 : paisId.hashCode());
+		result = prime * result + ((pais == null) ? 0 : pais.hashCode());
 		return result;
 	}
 
@@ -92,10 +92,10 @@ public class ProvinciaEdm {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (paisId == null) {
-			if (other.paisId != null)
+		if (pais == null) {
+			if (other.pais != null)
 				return false;
-		} else if (!paisId.equals(other.paisId))
+		} else if (!pais.equals(other.pais))
 			return false;
 		return true;
 	}

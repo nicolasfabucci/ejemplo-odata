@@ -6,17 +6,17 @@ import com.sdl.odata.api.edm.annotations.EdmEntity;
 import com.sdl.odata.api.edm.annotations.EdmEntitySet;
 import com.sdl.odata.api.edm.annotations.EdmProperty;
 
-@EdmEntity(name = "Pais", key = "Id", namespace = EntityServiceRegistar.NAME_SPACE, containerName = EntityServiceRegistar.CONTAINER_NAME)
+@EdmEntity(name = "Pais", key = "id", namespace = EntityServiceRegistar.NAME_SPACE, containerName = EntityServiceRegistar.CONTAINER_NAME)
 @EdmEntitySet("Paises")
 public class PaisEdm {
 
-	@EdmProperty(name = "Id", nullable = false)
+	@EdmProperty(nullable = false)
 	private Integer id = null;
 	
-	@EdmProperty(name = "Nombre", nullable = false, maxLength = 100)
+	@EdmProperty(nullable = false, maxLength = 100)
 	private String nombre= null;
 
-	@EdmProperty(name = "Prefijo", nullable = true)
+	@EdmProperty(nullable = true)
 	private Integer prefijo = null;
 	
 	public PaisEdm() {}

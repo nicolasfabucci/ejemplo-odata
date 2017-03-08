@@ -110,7 +110,7 @@ public class PaisesStrategyBuilder {
         
     	Map<String, Object> keys = selectByKeyOperation.getKeyAsJava();
     	
-        Integer id = Integer.valueOf(keys.get("Id").toString());
+        Integer id = Integer.valueOf(keys.get("id").toString());
         
         BooleanExpression exp = qPais.id.eq(id);
         this.expression = this.expression == null ? exp : this.expression.and(exp);

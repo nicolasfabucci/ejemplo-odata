@@ -15,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 import org.springframework.validation.FieldError;
 
+import scala.Option;
+
 import com.cairone.odataexample.dtos.ProvinciaFrmDto;
 import com.cairone.odataexample.dtos.validators.ProvinciaFrmDtoValidator;
 import com.cairone.odataexample.edm.resources.ProvinciaEdm;
@@ -129,8 +131,8 @@ public class ProvinciaDataSource implements DataSourceProvider, DataSource {
 				}
 			}
 			
-    		Integer provinciaID = Integer.valueOf(oDataUriKeyValues.get("Id").toString());
-    		Integer paisID = Integer.valueOf(oDataUriKeyValues.get("PaisId").toString());
+    		Integer provinciaID = Integer.valueOf(oDataUriKeyValues.get("id").toString());
+    		Integer paisID = Integer.valueOf(oDataUriKeyValues.get("paisId").toString());
     		
     		PaisEntity paisEntity = paisRepository.findOne(paisID);
 
@@ -150,23 +152,32 @@ public class ProvinciaDataSource implements DataSourceProvider, DataSource {
 		
 		throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PROVINCIA");
 	}
-
+	
 	@Override
 	public void delete(ODataUri uri, EntityDataModel entityDataModel) throws ODataException {
+				
+		Option<Object> entity = ODataUriUtil.extractEntityWithKeys(uri, entityDataModel);
+    	
+    	if(entity.isDefined()) {
+    		
+    		ProvinciaEdm provincia = (ProvinciaEdm) entity.get();
 
-		Map<String, Object> oDataUriKeyValues = ODataUriUtil.asJavaMap(ODataUriUtil.getEntityKeyMap(uri, entityDataModel));
+    		Integer provinciaID = provincia.getId();
+    		Integer paisID = provincia.getPaisId();
 
-		Integer provinciaID = Integer.valueOf(oDataUriKeyValues.get("Id").toString());
-		Integer paisID = Integer.valueOf(oDataUriKeyValues.get("PaisId").toString());
-		
-		ProvinciaEntity provinciaEntity = provinciaRepository.findOne(new ProvinciaPKEntity(paisID, provinciaID));
+    		ProvinciaEntity provinciaEntity = provinciaRepository.findOne(new ProvinciaPKEntity(paisID, provinciaID));
 
-		if(provinciaEntity == null) {
-			throw new ODataDataSourceException(
-	        	String.format("NO SE ENCUENTRA UNA PROVINCIA CON ID (ID=%s,PAIS=%s", provinciaID, paisID));
-		}
-		
-		provinciaRepository.delete(provinciaEntity);
+    		if(provinciaEntity == null) {
+    			throw new ODataDataSourceException(
+    	        	String.format("NO SE ENCUENTRA UNA PROVINCIA CON ID (ID=%s,PAIS=%s", provinciaID, paisID));
+    		}
+    		
+    		provinciaRepository.delete(provinciaEntity);
+    		
+    		return;
+        }
+    	
+    	throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PROVINCIA");
 	}
 
 	@Override
