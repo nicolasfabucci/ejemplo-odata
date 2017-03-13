@@ -8,24 +8,19 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
-import org.springframework.validation.FieldError;
 
 import scala.Option;
 
 import com.cairone.odataexample.dtos.ProvinciaFrmDto;
 import com.cairone.odataexample.dtos.validators.ProvinciaFrmDtoValidator;
 import com.cairone.odataexample.edm.resources.ProvinciaEdm;
-import com.cairone.odataexample.entities.PaisEntity;
 import com.cairone.odataexample.entities.ProvinciaEntity;
-import com.cairone.odataexample.entities.ProvinciaPKEntity;
-import com.cairone.odataexample.repositories.PaisRepository;
-import com.cairone.odataexample.repositories.ProvinciaRepository;
+import com.cairone.odataexample.services.ProvinciaService;
 import com.cairone.odataexample.strategyBuilders.ProvinciasStrategyBuilder;
+import com.cairone.odataexample.utils.SQLExceptionParser;
+import com.cairone.odataexample.utils.ValidatorUtil;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.ODataSystemException;
@@ -47,8 +42,7 @@ import com.sdl.odata.api.service.ODataRequestContext;
 @Component
 public class ProvinciaDataSource implements DataSourceProvider, DataSource {
 	
-	@Autowired private ProvinciaRepository provinciaRepository = null;
-	@Autowired private PaisRepository paisRepository = null;
+	@Autowired private ProvinciaService provinciaService = null;
 	@Autowired private ProvinciaFrmDtoValidator provinciaFrmDtoValidator = null;
 
 	@Autowired
@@ -62,41 +56,15 @@ public class ProvinciaDataSource implements DataSourceProvider, DataSource {
 			ProvinciaEdm provinciaEdm = (ProvinciaEdm) entity;
 			ProvinciaFrmDto provinciaFrmDto = new ProvinciaFrmDto(provinciaEdm);
 
-    		DataBinder binder = new DataBinder(provinciaFrmDto);
-			
-			binder.setValidator(provinciaFrmDtoValidator);
-			binder.validate();
-			
-			BindingResult bindingResult = binder.getBindingResult();
-			
-			if(bindingResult.hasFieldErrors()) {
-				
-				for (Object object : bindingResult.getAllErrors()) {
-				    if(object instanceof FieldError) {
-				        FieldError fieldError = (FieldError) object;
-				        String message = messageSource.getMessage(fieldError, null);
-				        throw new ODataDataSourceException(
-				        		String.format("HAY DATOS INVALIDOS EN LA SOLICITUD ENVIADA. %s", message));
-				    }
-				}
-			}
-			
-			PaisEntity paisEntity = paisRepository.findOne(provinciaFrmDto.getPaisID());
+			ValidatorUtil.validate(provinciaFrmDtoValidator, messageSource, provinciaFrmDto);
 
-			if(paisEntity == null) {
-				throw new ODataDataSourceException(
-		        	String.format("NO SE ENCUENTRA UN PAIS CON ID %s", provinciaFrmDto.getPaisID()));
+			try {
+				ProvinciaEntity provinciaEntity = provinciaService.nuevo(provinciaFrmDto);
+				return new ProvinciaEdm(provinciaEntity);
+			} catch (Exception e) {
+				String message = SQLExceptionParser.parse(e);
+				throw new ODataDataSourceException(message);
 			}
-			
-			ProvinciaEntity provinciaEntity = new ProvinciaEntity();
-			
-			provinciaEntity.setId(provinciaFrmDto.getId());
-			provinciaEntity.setPais(paisEntity);
-			provinciaEntity.setNombre(provinciaFrmDto.getNombre());
-			
-			provinciaRepository.save(provinciaEntity);
-			
-    		return new ProvinciaEdm(provinciaEntity);
 		}
 		
 		throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PROVINCIA");
@@ -112,42 +80,21 @@ public class ProvinciaDataSource implements DataSourceProvider, DataSource {
 			ProvinciaEdm provinciaEdm = (ProvinciaEdm) entity;
 			ProvinciaFrmDto provinciaFrmDto = new ProvinciaFrmDto(provinciaEdm);
 
-    		DataBinder binder = new DataBinder(provinciaFrmDto);
-			
-			binder.setValidator(provinciaFrmDtoValidator);
-			binder.validate();
-			
-			BindingResult bindingResult = binder.getBindingResult();
-			
-			if(bindingResult.hasFieldErrors()) {
-				
-				for (Object object : bindingResult.getAllErrors()) {
-				    if(object instanceof FieldError) {
-				        FieldError fieldError = (FieldError) object;
-				        String message = messageSource.getMessage(fieldError, null);
-				        throw new ODataDataSourceException(
-				        		String.format("HAY DATOS INVALIDOS EN LA SOLICITUD ENVIADA. %s", message));
-				    }
-				}
-			}
-			
-    		Integer provinciaID = Integer.valueOf(oDataUriKeyValues.get("id").toString());
-    		Integer paisID = Integer.valueOf(oDataUriKeyValues.get("paisId").toString());
-    		
-    		PaisEntity paisEntity = paisRepository.findOne(paisID);
+			ValidatorUtil.validate(provinciaFrmDtoValidator, messageSource, provinciaFrmDto);
 
-			if(paisEntity == null) {
-				throw new ODataDataSourceException(
-		        	String.format("NO SE ENCUENTRA UN PAIS CON ID %s", paisID));
+			Integer paisID = Integer.valueOf(oDataUriKeyValues.get("id").toString());
+			Integer provinciaID = Integer.valueOf(oDataUriKeyValues.get("provinciaId").toString());
+			
+			provinciaFrmDto.setId(provinciaID);
+			provinciaFrmDto.setPaisID(paisID);
+
+			try {
+				ProvinciaEntity provinciaEntity = provinciaService.nuevo(provinciaFrmDto);
+				return new ProvinciaEdm(provinciaEntity);
+			} catch (Exception e) {
+				String message = SQLExceptionParser.parse(e);
+				throw new ODataDataSourceException(message);
 			}
-			
-			ProvinciaEntity provinciaEntity = provinciaRepository.findOne(new ProvinciaPKEntity(paisID, provinciaID));
-			
-			provinciaEntity.setNombre(provinciaFrmDto.getNombre());
-			
-			provinciaRepository.save(provinciaEntity);
-			
-			return new ProvinciaEdm(provinciaEntity);
 		}
 		
 		throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PROVINCIA");
@@ -165,16 +112,13 @@ public class ProvinciaDataSource implements DataSourceProvider, DataSource {
     		Integer provinciaID = provincia.getId();
     		Integer paisID = provincia.getPaisId();
 
-    		ProvinciaEntity provinciaEntity = provinciaRepository.findOne(new ProvinciaPKEntity(paisID, provinciaID));
-
-    		if(provinciaEntity == null) {
-    			throw new ODataDataSourceException(
-    	        	String.format("NO SE ENCUENTRA UNA PROVINCIA CON ID (ID=%s,PAIS=%s", provinciaID, paisID));
-    		}
-    		
-    		provinciaRepository.delete(provinciaEntity);
-    		
-    		return;
+    		try {
+    			provinciaService.borrar(paisID, provinciaID);
+				return;
+			} catch (Exception e) {
+				String message = SQLExceptionParser.parse(e);
+				throw new ODataDataSourceException(message);
+			}
         }
     	
     	throw new ODataDataSourceException("LOS DATOS NO CORRESPONDEN A LA ENTIDAD PROVINCIA");
@@ -216,9 +160,7 @@ public class ProvinciaDataSource implements DataSourceProvider, DataSource {
         int skip = builder.getSkip();
 		List<String> propertyNames = builder.getPropertyNames();
 		
-		Page<ProvinciaEntity> pageProvinciaEntity = orderByList == null || orderByList.size() == 0 ?
-				provinciaRepository.findAll(expression, new PageRequest(0, limit)) :
-				provinciaRepository.findAll(expression, new PageRequest(0, limit, new Sort(orderByList)));
+		Page<ProvinciaEntity> pageProvinciaEntity = provinciaService.ejecutarConsulta(expression, orderByList, limit);
 		
 		List<ProvinciaEntity> provinciaEntities = pageProvinciaEntity.getContent();
 		

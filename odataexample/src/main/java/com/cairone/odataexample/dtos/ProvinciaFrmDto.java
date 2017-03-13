@@ -18,7 +18,7 @@ public class ProvinciaFrmDto {
 	}
 
 	public ProvinciaFrmDto(ProvinciaEdm provinciaEdm) {
-		this(provinciaEdm.getPais().getId(), provinciaEdm.getId(), provinciaEdm.getNombre());
+		this(provinciaEdm.getPaisId(), provinciaEdm.getId(), provinciaEdm.getNombre());
 	}
 
 	public Integer getPaisID() {

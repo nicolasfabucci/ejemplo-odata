@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.cairone.odataexample.edm.resources.LocalidadEdm;
 import com.cairone.odataexample.edm.resources.PaisEdm;
 import com.cairone.odataexample.edm.resources.ProvinciaEdm;
 import com.cairone.odataexample.edm.resources.TipoDocumentoEdm;
@@ -24,6 +25,7 @@ public class EntityServiceRegistar {
 	@PostConstruct
     public void registerEntities() throws ODataException {
 		oDataEdmRegistry.registerClasses(Arrays.asList(
+				LocalidadEdm.class,
 				PaisEdm.class,
 				ProvinciaEdm.class,
 				TipoDocumentoEdm.class));

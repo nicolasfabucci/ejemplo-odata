@@ -17,6 +17,7 @@ import com.sdl.odata.api.parser.CountOption;
 import com.sdl.odata.api.parser.ODataUriUtil;
 import com.sdl.odata.api.parser.QueryOption;
 import com.sdl.odata.api.processor.query.ComparisonCriteria;
+import com.sdl.odata.api.processor.query.ContainsMethodCriteria;
 import com.sdl.odata.api.processor.query.CountOperation;
 import com.sdl.odata.api.processor.query.Criteria;
 import com.sdl.odata.api.processor.query.CriteriaFilterOperation;
@@ -123,32 +124,62 @@ public class ProvinciasStrategyBuilder {
     	if(criteria instanceof ComparisonCriteria) {
     		
             ComparisonCriteria comparisonCriteria = (ComparisonCriteria) criteria;
+            execComparisonCriteria(comparisonCriteria);
+        }
 
-            if(comparisonCriteria.getLeft() instanceof PropertyCriteriaValue && comparisonCriteria.getRight() instanceof LiteralCriteriaValue) {
+    	if(criteria instanceof ContainsMethodCriteria) {
+    		
+    		ContainsMethodCriteria containsMethodCriteria = (ContainsMethodCriteria) criteria;
+    		execContainsMethodCriteria(containsMethodCriteria);
+    	}
+    }
 
-                PropertyCriteriaValue propertyCriteriaValue = (PropertyCriteriaValue) comparisonCriteria.getLeft();
-                LiteralCriteriaValue literalCriteriaValue = (LiteralCriteriaValue) comparisonCriteria.getRight();
-                
-                String field = propertyCriteriaValue.getPropertyName().trim().toUpperCase();
-                Object value = literalCriteriaValue.getValue();
-                
-                switch(field)
-                {
-                case "ID":
-                {
-                	Integer idValue = (Integer) value;
-                	BooleanExpression exp = qProvincia.id.eq(idValue);
-                	this.expression = this.expression == null ? exp : this.expression.and(exp);
-                	break;
-                }
-                case "NOMBRE":
-                {
-                	String descripcionValue = (String) value;
-                	BooleanExpression exp = qProvincia.nombre.eq(descripcionValue);
-                    this.expression = this.expression == null ? exp : this.expression.and(exp);
-                	break;
-                }
-                }
+    private void execContainsMethodCriteria(ContainsMethodCriteria containsMethodCriteria) {
+
+		PropertyCriteriaValue propertyCriteriaValue = (PropertyCriteriaValue) containsMethodCriteria.getProperty();
+        LiteralCriteriaValue literalCriteriaValue = (LiteralCriteriaValue) containsMethodCriteria.getStringLiteral();
+        
+        String field = propertyCriteriaValue.getPropertyName().trim().toUpperCase();
+        Object value = literalCriteriaValue.getValue();
+        
+        switch(field)
+        {
+        case "NOMBRE":
+        {
+        	String nombre = value.toString();
+        	BooleanExpression exp = qProvincia.nombre.contains(nombre);
+            this.expression = this.expression == null ? exp : this.expression.and(exp);
+        	break;
+        }
+        }
+    }
+
+    private void execComparisonCriteria(ComparisonCriteria comparisonCriteria) {
+
+        if(comparisonCriteria.getLeft() instanceof PropertyCriteriaValue && comparisonCriteria.getRight() instanceof LiteralCriteriaValue) {
+
+            PropertyCriteriaValue propertyCriteriaValue = (PropertyCriteriaValue) comparisonCriteria.getLeft();
+            LiteralCriteriaValue literalCriteriaValue = (LiteralCriteriaValue) comparisonCriteria.getRight();
+            
+            String field = propertyCriteriaValue.getPropertyName().trim().toUpperCase();
+            Object value = literalCriteriaValue.getValue();
+            
+            switch(field)
+            {
+            case "ID":
+            {
+            	Integer idValue = (Integer) value;
+            	BooleanExpression exp = qProvincia.id.eq(idValue);
+            	this.expression = this.expression == null ? exp : this.expression.and(exp);
+            	break;
+            }
+            case "NOMBRE":
+            {
+            	String descripcionValue = (String) value;
+            	BooleanExpression exp = qProvincia.nombre.eq(descripcionValue);
+                this.expression = this.expression == null ? exp : this.expression.and(exp);
+            	break;
+            }
             }
         }
     }
