@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.cairone.odataexample.edm.resources.LocalidadEdm;
 import com.cairone.odataexample.edm.resources.PaisEdm;
 import com.cairone.odataexample.edm.resources.ProvinciaEdm;
+import com.cairone.odataexample.edm.resources.SectorEdm;
 import com.cairone.odataexample.edm.resources.TipoDocumentoEdm;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.edm.registry.ODataEdmRegistry;
@@ -28,6 +29,7 @@ public class EntityServiceRegistar {
 				LocalidadEdm.class,
 				PaisEdm.class,
 				ProvinciaEdm.class,
-				TipoDocumentoEdm.class));
+				TipoDocumentoEdm.class,
+				SectorEdm.class));
     }
 }
