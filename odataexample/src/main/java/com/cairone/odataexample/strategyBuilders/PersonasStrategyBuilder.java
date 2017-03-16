@@ -46,7 +46,6 @@ public class PersonasStrategyBuilder {
     private int skip = 0;
     private boolean count;
 	private boolean includeCount;
-	private boolean expandirSectores = false;
 	
 	public BooleanExpression buildCriteria(QueryOperation queryOperation, ODataRequestContext requestContext) throws ODataException {
 		
@@ -81,10 +80,6 @@ public class PersonasStrategyBuilder {
     public List<Sort.Order> getOrderByList() {
         return orderByList;
     }
-
-    public boolean getExpandirSectores() {
-		return expandirSectores;
-	}
 
 	private void buildFromOperation(QueryOperation operation) throws ODataException {
         if (operation instanceof SelectOperation) {
@@ -213,10 +208,6 @@ public class PersonasStrategyBuilder {
     }
     
     private void buildFromExpand(ExpandOperation expandOperation) throws ODataException {
-    	List<String> properties = expandOperation.getExpandPropertiesAsJava();
-    	if(properties.contains("sectores")) {
-    		expandirSectores = true;
-    	}
     	buildFromOperation(expandOperation.getSource());
     }
 

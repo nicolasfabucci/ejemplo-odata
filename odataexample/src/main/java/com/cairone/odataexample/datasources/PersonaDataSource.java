@@ -16,9 +16,7 @@ import scala.Option;
 import com.cairone.odataexample.dtos.PersonaFrmDto;
 import com.cairone.odataexample.dtos.validators.PersonaFrmDtoValidator;
 import com.cairone.odataexample.edm.resources.PersonaEdm;
-import com.cairone.odataexample.edm.resources.PersonaSectorEdm;
 import com.cairone.odataexample.entities.PersonaEntity;
-import com.cairone.odataexample.entities.PersonaSectorEntity;
 import com.cairone.odataexample.services.PersonaService;
 import com.cairone.odataexample.strategyBuilders.PersonasStrategyBuilder;
 import com.cairone.odataexample.utils.SQLExceptionParser;
@@ -167,20 +165,7 @@ public class PersonaDataSource implements DataSourceProvider, DataSource {
 		
 		return () -> {
 
-			List<PersonaEdm> filtered = personaEntities.stream().map(entity -> {
-				
-				PersonaEdm personaEdm = new PersonaEdm(entity);
-				
-				if(builder.getExpandirSectores()) {
-					Iterable<PersonaSectorEntity> personaSectorEntities = personaService.buscarSectores(entity);
-					for(PersonaSectorEntity personaSectorEntity : personaSectorEntities) {
-						personaEdm.getSectores().add(new PersonaSectorEdm(personaSectorEntity));
-					}
-				}
-				
-				return personaEdm; 
-			})
-			.collect(Collectors.toList());
+			List<PersonaEdm> filtered = personaEntities.stream().map(entity -> { return new PersonaEdm(entity); }).collect(Collectors.toList());
 			
 			long count = 0;
         	
