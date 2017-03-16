@@ -42,7 +42,7 @@ import com.sdl.odata.api.service.ODataRequestContext;
 @Component
 public class SectorDataSource implements DataSourceProvider, DataSource {
 
-	@Autowired private SectorService sectorService = null;
+	@Autowired public SectorService sectorService = null;
 	@Autowired private SectorFrmDtoValidator sectorFrmDtoValidator = null;
 
 	@Autowired
