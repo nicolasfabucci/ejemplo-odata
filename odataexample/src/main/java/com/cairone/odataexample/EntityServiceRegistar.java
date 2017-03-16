@@ -11,6 +11,7 @@ import com.cairone.odataexample.edm.actions.PersonaSectorAgregarAction;
 import com.cairone.odataexample.edm.actions.PersonaSectorQuitarAction;
 import com.cairone.odataexample.edm.resources.LocalidadEdm;
 import com.cairone.odataexample.edm.resources.PaisEdm;
+import com.cairone.odataexample.edm.resources.PermisoEdm;
 import com.cairone.odataexample.edm.resources.PersonaEdm;
 import com.cairone.odataexample.edm.resources.PersonaSectorEdm;
 import com.cairone.odataexample.edm.resources.ProvinciaEdm;
@@ -34,6 +35,7 @@ public class EntityServiceRegistar {
 				GeneroEnum.class,
 				LocalidadEdm.class,
 				PaisEdm.class,
+				PermisoEdm.class,
 				PersonaEdm.class,
 				PersonaSectorEdm.class,
 				PersonaSectorAgregarAction.class,
