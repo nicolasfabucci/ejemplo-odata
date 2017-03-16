@@ -17,6 +17,7 @@ import com.cairone.odataexample.edm.resources.PersonaSectorEdm;
 import com.cairone.odataexample.edm.resources.ProvinciaEdm;
 import com.cairone.odataexample.edm.resources.SectorEdm;
 import com.cairone.odataexample.edm.resources.TipoDocumentoEdm;
+import com.cairone.odataexample.edm.resources.UsuarioEdm;
 import com.cairone.odataexample.enums.GeneroEnum;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.edm.registry.ODataEdmRegistry;
@@ -42,6 +43,7 @@ public class EntityServiceRegistar {
 				PersonaSectorQuitarAction.class,
 				ProvinciaEdm.class,
 				TipoDocumentoEdm.class,
-				SectorEdm.class));
+				SectorEdm.class,
+				UsuarioEdm.class));
     }
 }
