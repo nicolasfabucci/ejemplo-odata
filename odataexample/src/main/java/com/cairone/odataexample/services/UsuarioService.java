@@ -11,11 +11,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cairone.odataexample.dtos.UsuarioFrmDto;
+import com.cairone.odataexample.entities.PermisoEntity;
 import com.cairone.odataexample.entities.PersonaEntity;
 import com.cairone.odataexample.entities.PersonaPKEntity;
 import com.cairone.odataexample.entities.UsuarioEntity;
 import com.cairone.odataexample.entities.UsuarioPKEntity;
+import com.cairone.odataexample.entities.UsuarioPermisoEntity;
+import com.cairone.odataexample.entities.UsuarioPermisoPKEntity;
 import com.cairone.odataexample.repositories.PersonaRepository;
+import com.cairone.odataexample.repositories.UsuarioPermisoRepository;
 import com.cairone.odataexample.repositories.UsuarioRepository;
 import com.mysema.query.types.expr.BooleanExpression;
 
@@ -23,6 +27,7 @@ import com.mysema.query.types.expr.BooleanExpression;
 public class UsuarioService {
 
 	@Autowired private UsuarioRepository usuarioRepository = null;
+	@Autowired private UsuarioPermisoRepository usuarioPermisoRepository = null;
 	@Autowired private PersonaRepository personaRepository = null;
 
 	@Transactional(readOnly=true)
@@ -114,4 +119,29 @@ public class UsuarioService {
 		usuarioRepository.delete(usuarioEntity);
 	}
 
+	@Transactional(readOnly=true)
+	public UsuarioPermisoEntity buscarUnPermisoAsignado(UsuarioEntity usuarioEntity, PermisoEntity permisoEntity) {
+		
+		UsuarioPermisoEntity usuarioPermisoEntity = usuarioPermisoRepository.findOne(new UsuarioPermisoPKEntity(usuarioEntity, permisoEntity));
+		return usuarioPermisoEntity;
+	}
+	
+	@Transactional
+	public UsuarioPermisoEntity asignarPermiso(UsuarioEntity usuarioEntity, PermisoEntity permisoEntity) {
+		
+		UsuarioPermisoEntity usuarioPermisoEntity = new UsuarioPermisoEntity(usuarioEntity, permisoEntity);
+		usuarioPermisoRepository.save(usuarioPermisoEntity);
+		
+		return usuarioPermisoEntity;
+	}
+
+	@Transactional
+	public void quitarPermiso(UsuarioEntity usuarioEntity, PermisoEntity permisoEntity) {
+		
+		UsuarioPermisoEntity usuarioPermisoEntity = usuarioPermisoRepository.findOne(new UsuarioPermisoPKEntity(usuarioEntity, permisoEntity));
+		
+		if(usuarioPermisoEntity != null) {
+			usuarioPermisoRepository.delete(usuarioPermisoEntity);
+		}
+	}
 }

@@ -33,7 +33,7 @@ import com.sdl.odata.api.service.ODataRequestContext;
 @Component
 public class PermisoDataSource implements DataSourceProvider, DataSource {
 
-	@Autowired private PermisoService permisoService = null;
+	@Autowired public PermisoService permisoService = null;
 	
 	@Override
 	public Object create(ODataUri uri, Object entity, EntityDataModel entityDataModel) throws ODataException {
