@@ -17,31 +17,31 @@ import com.sdl.odata.api.edm.annotations.EdmProperty;
 @EdmEntitySet("Personas")
 public class PersonaEdm {
 
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="tipoDocumentoId", nullable = false)
 	private Integer tipoDocumentoId = null;
 	
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="numeroDocumento", nullable = false)
 	private String numeroDocumento = null;
 	
-	@EdmProperty(nullable = false, maxLength=100)
+	@EdmProperty(name="nombres", nullable = false, maxLength=100)
 	private String nombres = null;
 
-	@EdmProperty(nullable = false, maxLength=100)
+	@EdmProperty(name="apellidos", nullable = false, maxLength=100)
 	private String apellidos = null;
 
-	@EdmProperty(maxLength=100)
+	@EdmProperty(name="apodo", maxLength=100)
 	private String apodo = null;
 
-	@EdmNavigationProperty
+	@EdmNavigationProperty(name="localidad")
 	private LocalidadEdm localidad = null;
 	
-	@EdmProperty
+	@EdmProperty(name="fechaAlta")
 	private LocalDate fechaAlta = null;
 	
-	@EdmProperty
+	@EdmProperty(name="genero")
 	private GeneroEnum genero = null;
 	
-	@EdmNavigationProperty
+	@EdmNavigationProperty(name="sectores")
 	private List<PersonaSectorEdm> sectores = null;
 	
 	public PersonaEdm() {

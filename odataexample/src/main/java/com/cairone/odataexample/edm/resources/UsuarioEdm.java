@@ -16,34 +16,34 @@ import com.sdl.odata.api.edm.annotations.EdmProperty;
 @EdmEntitySet("Usuarios")
 public class UsuarioEdm {
 
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="tipoDocumentoId", nullable = false)
 	private Integer tipoDocumentoId = null;
 	
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="numeroDocumento", nullable = false)
 	private String numeroDocumento = null;
 	
-	@EdmProperty(nullable = false, maxLength=200)
+	@EdmProperty(name="nombreUsuario", nullable = false, maxLength=200)
 	private String nombreUsuario = null;
 	
-	@EdmProperty
+	@EdmProperty(name="fechaAlta")
 	private LocalDate fechaAlta = null;
 	
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="cuentaVencida", nullable = false)
 	private Boolean cuentaVencida = null;
 
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="claveVencida", nullable = false)
 	private Boolean claveVencida = null;
 
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="cuentaBloqueada", nullable = false)
 	private Boolean cuentaBloqueada = null;
 
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="usuarioHabilitado", nullable = false)
 	private Boolean usuarioHabilitado = null;
 
-	@EdmNavigationProperty
+	@EdmNavigationProperty(name="persona")
 	private PersonaEdm persona = null;
 	
-	@EdmNavigationProperty
+	@EdmNavigationProperty(name="permisos")
 	private List<PermisoEdm> permisos = null;
 
 	public UsuarioEdm() {

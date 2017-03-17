@@ -11,25 +11,25 @@ import com.sdl.odata.api.edm.annotations.EdmProperty;
 @EdmEntitySet("Localidades")
 public class LocalidadEdm {
 
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="paisId", nullable = false)
 	private Integer paisId = null;
 	
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="provinciaId", nullable = false)
 	private Integer provinciaId = null;
 	
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="localidadId", nullable = false)
 	private Integer localidadId = null;
 
-	@EdmNavigationProperty
+	@EdmNavigationProperty(name="provincia")
 	private ProvinciaEdm provincia = null;
 
-	@EdmProperty(nullable = false, maxLength=100)
+	@EdmProperty(name="nombre", nullable = false, maxLength=100)
 	private String nombre = null;
 	
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="cp", nullable = false)
 	private Integer cp = null;
 	
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="prefijo", nullable = false)
 	private Integer prefijo = null;
 	
 	public LocalidadEdm() {}

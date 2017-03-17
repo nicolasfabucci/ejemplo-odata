@@ -10,13 +10,13 @@ import com.sdl.odata.api.edm.annotations.EdmProperty;
 @EdmEntitySet("TiposDocumentos")
 public class TipoDocumentoEdm {
 
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="id", nullable = false)
 	private Integer id = null;
 	
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="nombre", nullable = false)
 	private String nombre = null;
 	
-	@EdmProperty(nullable = true)
+	@EdmProperty(name="abreviatura", nullable = true)
 	private String abreviatura = null;
 
 	public TipoDocumentoEdm() {}

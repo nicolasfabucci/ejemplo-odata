@@ -10,13 +10,13 @@ import com.sdl.odata.api.edm.annotations.EdmProperty;
 @EdmEntitySet("Paises")
 public class PaisEdm {
 
-	@EdmProperty(nullable = false)
+	@EdmProperty(name="id", nullable = false)
 	private Integer id = null;
 	
-	@EdmProperty(nullable = false, maxLength = 100)
+	@EdmProperty(name="nombre", nullable = false, maxLength = 100)
 	private String nombre= null;
 
-	@EdmProperty(nullable = true)
+	@EdmProperty(name="prefijo", nullable = true)
 	private Integer prefijo = null;
 	
 	public PaisEdm() {}

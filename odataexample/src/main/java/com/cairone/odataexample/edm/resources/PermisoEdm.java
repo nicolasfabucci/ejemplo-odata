@@ -10,10 +10,10 @@ import com.sdl.odata.api.edm.annotations.EdmProperty;
 @EdmEntitySet("Permisos")
 public class PermisoEdm {
 
-	@EdmProperty(nullable = false, maxLength=15)
+	@EdmProperty(name="id", nullable = false, maxLength=15)
 	private String id = null;
 	
-	@EdmProperty(nullable = false, maxLength=200)
+	@EdmProperty(name="descripcion", nullable = false, maxLength=200)
 	private String descripcion = null;
 
 	public PermisoEdm() {}
