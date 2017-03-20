@@ -19,13 +19,14 @@ import com.cairone.odataexample.edm.resources.PaisEdm;
 import com.cairone.odataexample.entities.PaisEntity;
 import com.cairone.odataexample.services.PaisService;
 import com.cairone.odataexample.strategyBuilders.PaisesStrategyBuilder;
+import com.cairone.odataexample.utils.GenJsonOdataSelect;
 import com.cairone.odataexample.utils.SQLExceptionParser;
 import com.cairone.odataexample.utils.ValidatorUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.ODataSystemException;
 import com.sdl.odata.api.edm.model.EntityDataModel;
-import com.sdl.odata.api.edm.util.EdmUtil;
 import com.sdl.odata.api.parser.ODataUri;
 import com.sdl.odata.api.parser.ODataUriUtil;
 import com.sdl.odata.api.parser.TargetType;
@@ -176,9 +177,10 @@ public class PaisDataSource implements DataSourceProvider, DataSource  {
             }
 
             if (propertyNames != null && !propertyNames.isEmpty()) {
-                try {
-                    return QueryResult.from(EdmUtil.getEdmPropertyValue(filtered.get(0), propertyNames.get(0)));
-                } catch (IllegalAccessException e) {
+            	try {
+            		String jsonInString = GenJsonOdataSelect.generate(propertyNames, filtered);
+            		return QueryResult.from(jsonInString);
+            	} catch (JsonProcessingException | IllegalArgumentException | IllegalAccessException e) {
                     return QueryResult.from(Collections.emptyList());
                 }
             }

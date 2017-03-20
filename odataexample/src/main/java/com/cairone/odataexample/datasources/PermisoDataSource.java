@@ -13,11 +13,12 @@ import com.cairone.odataexample.edm.resources.PermisoEdm;
 import com.cairone.odataexample.entities.PermisoEntity;
 import com.cairone.odataexample.services.PermisoService;
 import com.cairone.odataexample.strategyBuilders.PermisosStrategyBuilder;
+import com.cairone.odataexample.utils.GenJsonOdataSelect;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.sdl.odata.api.ODataException;
 import com.sdl.odata.api.ODataSystemException;
 import com.sdl.odata.api.edm.model.EntityDataModel;
-import com.sdl.odata.api.edm.util.EdmUtil;
 import com.sdl.odata.api.parser.ODataUri;
 import com.sdl.odata.api.parser.TargetType;
 import com.sdl.odata.api.processor.datasource.DataSource;
@@ -108,11 +109,12 @@ public class PermisoDataSource implements DataSourceProvider, DataSource {
             }
 
             if (propertyNames != null && !propertyNames.isEmpty()) {
-                try {
-                    return QueryResult.from(EdmUtil.getEdmPropertyValue(filtered.get(0), propertyNames.get(0)));
-                } catch (IllegalAccessException e) {
+            	try {
+            		String jsonInString = GenJsonOdataSelect.generate(propertyNames, filtered);
+            		return QueryResult.from(jsonInString);
+            	} catch (JsonProcessingException | IllegalArgumentException | IllegalAccessException e) {
                     return QueryResult.from(Collections.emptyList());
-                }
+                }	
             }
             
             QueryResult result = QueryResult.from(filtered);
