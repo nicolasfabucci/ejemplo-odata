@@ -180,6 +180,27 @@ public class ProvinciasStrategyBuilder {
                 this.expression = this.expression == null ? exp : this.expression.and(exp);
             	break;
             }
+            case "PAIS.ID":
+            {
+            	Integer paisIdValue = Integer.valueOf(value.toString());
+            	BooleanExpression exp = qProvincia.pais.id.eq(paisIdValue);
+                this.expression = this.expression == null ? exp : this.expression.and(exp);
+            	break;
+            }
+            case "PAIS.NOMBRE":
+            {
+            	String paisNombreValue = (String) value;
+            	BooleanExpression exp = qProvincia.pais.nombre.eq(paisNombreValue);
+                this.expression = this.expression == null ? exp : this.expression.and(exp);
+            	break;
+            }
+            case "PAIS.PREFIJO":
+            {
+            	Integer paisPrefijoValue = Integer.valueOf(value.toString());
+            	BooleanExpression exp = qProvincia.pais.prefijo.eq(paisPrefijoValue);
+                this.expression = this.expression == null ? exp : this.expression.and(exp);
+            	break;
+            }
             }
         }
     }
