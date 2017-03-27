@@ -117,7 +117,7 @@ public class ProvinciasStrategyBuilder {
         this.expression = this.expression == null ? exp : this.expression.and(exp);
     }
 
-    private void buildFromFilter(CriteriaFilterOperation criteriaFilterOperation) {
+    private void buildFromFilter(CriteriaFilterOperation criteriaFilterOperation) throws ODataException {
     	
     	Criteria criteria = criteriaFilterOperation.getCriteria();
         
@@ -132,6 +132,8 @@ public class ProvinciasStrategyBuilder {
     		ContainsMethodCriteria containsMethodCriteria = (ContainsMethodCriteria) criteria;
     		execContainsMethodCriteria(containsMethodCriteria);
     	}
+    	
+    	buildFromOperation(criteriaFilterOperation.getSource());
     }
 
     private void execContainsMethodCriteria(ContainsMethodCriteria containsMethodCriteria) {
@@ -180,6 +182,7 @@ public class ProvinciasStrategyBuilder {
                 this.expression = this.expression == null ? exp : this.expression.and(exp);
             	break;
             }
+            case "PAISID":
             case "PAIS.ID":
             {
             	Integer paisIdValue = Integer.valueOf(value.toString());
